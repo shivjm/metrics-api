@@ -21,11 +21,11 @@ describe("Metrics", () => {
 
     assert.equal(metrics.sum("foo"), 25);
     time = 6;
-    metrics.prune();
+    assert.equal(metrics.prune(), 1);
     assert.equal(metrics.sum("foo"), 20);
     assert.equal(metrics.sum("bar"), 10);
     time = 20;
-    metrics.prune();
+    assert.equal(metrics.prune(), 2);
     assert.equal(metrics.sum("foo"), 0);
     assert.equal(metrics.sum("bar"), 0);
     metrics.record("baz", 10999);
@@ -37,7 +37,7 @@ describe("Metrics", () => {
     assert.equal(metrics.sum("foo"), 3);
 
     time = 26;
-    metrics.prune();
+    assert.equal(metrics.prune(), 2);
     assert.equal(metrics.sum("baz"), 0);
     assert.equal(metrics.sum("foo"), 3);
   });

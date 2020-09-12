@@ -13,6 +13,8 @@ export class Metrics {
   prune() {
     const now = this.getCurrentTime();
 
+    let deleted = 0;
+
     for (const list of this.store.values()) {
       const { head } = list;
 
@@ -20,8 +22,14 @@ export class Metrics {
         continue;
       }
 
+      const before = reduce(list, (acc, _curr) => acc + 1, 0);
       deleteWhile(list, (node) => now - node.timestamp > this.maxAgeInSeconds);
+      const after = reduce(list, (acc, _curr) => acc + 1, 0);
+
+      deleted += before - after;
     }
+
+    return deleted;
   }
 
   record(key: string, value: number) {
