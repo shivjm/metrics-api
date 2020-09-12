@@ -1,0 +1,45 @@
+swagger: "2.0"
+info:
+  description: "An API for recording metrics and fetching metrics within a time window"
+  version: "0.0.1"
+  title: "Metrics API"
+basePath: "/metric"
+paths:
+  /{metric}:
+    post:
+      summary: "Records a metric"
+      description: "Automatically adds current timestamp."
+      operationId: "recordMetric"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "metric"
+          in: "path"
+          description: "Name of metric to record"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "metric successfully recorded"
+          schema:
+            type: "object"
+            properties: {}
+  /{metric}/sum:
+    get:
+      summary: "Gets the total of the recently recorded metrics with this name"
+      operationId: "getMetricSum"
+      parameters:
+        - name: "metric"
+          in: "path"
+          description: "Name of metric to record"
+          required: true
+          type: "string"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: "successfully fetched total"
+          schema:
+            type: "number"
+        400:
+          description: "non-existent metric requested"
