@@ -1,7 +1,7 @@
 import "mocha";
 import { assert } from "chai";
 
-import { append, deleteWhile, IList, IMetricNode } from "../src/list";
+import { append, deleteWhile, IList, IMetricNode, reduce } from "../src/list";
 
 describe("A linked list", () => {
   it("can be created", () => {
@@ -56,5 +56,23 @@ describe("A linked list", () => {
 
     deleteWhile(list2, ({ timestamp }) => timestamp < 5);
     assert.deepEqual(list2, { head: { ...node2 }, tail: node4 });
+  });
+
+  it("can be traversed", () => {
+    const node1: IMetricNode = { value: 50, timestamp: 1 };
+    const node2: IMetricNode = { value: 800, timestamp: 5 };
+    const node3: IMetricNode = { value: 20, timestamp: 8 };
+    const node4: IMetricNode = { value: 90, timestamp: 8 };
+
+    node1.next = node2;
+    node2.next = node3;
+    node3.next = node4;
+
+    const list1: IList = { head: node1, tail: node4 };
+
+    assert.equal(
+      reduce(list1, (acc, curr) => acc + curr, 0),
+      960
+    );
   });
 });

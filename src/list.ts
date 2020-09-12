@@ -60,3 +60,22 @@ export function deleteWhile(
 
   list.head = current;
 }
+
+export function reduce<T>(
+  list: IList,
+  reducer: (acc: T, curr: number) => T,
+  initialValue: T
+): T {
+  const { head } = list;
+
+  let current = head;
+  let acc = initialValue;
+
+  while (current !== undefined) {
+    acc = reducer(acc, current.value);
+
+    current = current.next;
+  }
+
+  return acc;
+}
