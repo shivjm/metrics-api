@@ -32,13 +32,55 @@ server:
 | `METRICS_APP_PRUNE_INTERVAL_SECONDS` | Interval in seconds at which to prune expired metrics | `1` |
 | `METRICS_APP_LOG_LEVEL` | Level of log messages to show (from most output to least: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`) | `DEBUG` |
 
+### Docker
+
+The included Dockerfile can be built and run using any standard Docker
+installation:
+
+1. Build the image: `docker build -t metrics-server .` (where
+   `metrics-server` can be any name you like)
+
+1. Run the server: `docker run -it --rm -e 3000:3000 metrics-server`
+   (where `metrics-server` is the name from the previous step and
+   `3000:3000` can be replaced with, for example, `50000:3000` to
+   expose the server on port 50000 of the local machine)
+   
+1. (In a separate session, as the server will need to keep running)
+   Make a request:
+
+   ```text
+   λ curl -i -X POST -H "Content-Type: application/json" -d "{ \"value\": 4 }" localhost:3000/metric/foo
+   HTTP/1.1 204 No Content
+   X-Powered-By: Express
+   ETag: W/"a-bAsFyilMr4Ra1hIU5PyoyFRunpI"
+   Date: Sat, 12 Sep 2020 19:05:04 GMT
+   Connection: keep-alive
+   
+   λ curl -i 192.168.99.136:3000/metric/foo/sum
+   HTTP/1.1 200 OK
+   X-Powered-By: Express
+   Content-Type: text/html; charset=utf-8
+   Content-Length: 1
+   ETag: W/"1-G2RTiSRzpGfQc3LUXrBavCAxZHo"
+   Date: Sat, 12 Sep 2020 19:07:53 GMT
+   Connection: keep-alive
+   
+   4
+   ```
+
 ## Testing
 
-1. `npm test`
+1. Install the dependencies: `npm install`
+
+1. Run the tests: `npm test`
 
 ## Building
 
-1. `npm run build`
+1. Install the dependencies: `npm install`
+
+2. Run the build script: `npm run build`
+
+The resultant JavaScript files can be found under `dist/`.
 
 ## How It Works
 
