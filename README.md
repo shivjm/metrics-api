@@ -40,7 +40,7 @@ installation:
 1. Build the image: `docker build -t metrics-server .` (where
    `metrics-server` can be any name you like)
 
-1. Run the server: `docker run -it --rm -e 3000:3000 metrics-server`
+1. Run the server: `docker run -it --rm -p 3000:3000 metrics-server`
    (where `metrics-server` is the name from the previous step and
    `3000:3000` can be replaced with, for example, `50000:3000` to
    expose the server on port 50000 of the local machine)
