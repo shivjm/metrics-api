@@ -56,6 +56,9 @@ describe("A linked list", () => {
 
     deleteWhile(list2, ({ timestamp }) => timestamp < 5);
     assert.deepEqual(list2, { head: { ...node2 }, tail: node4 });
+
+    deleteWhile(list2, () => true);
+    assert.deepEqual(list2, {});
   });
 
   it("can be traversed", () => {

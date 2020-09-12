@@ -52,7 +52,9 @@ export function deleteWhile(
   while (filter(current)) {
     const { next } = current;
     if (next === undefined) {
-      return {};
+      delete list.head;
+      delete list.tail;
+      return;
     }
 
     current = next;
