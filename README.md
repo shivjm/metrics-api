@@ -16,11 +16,9 @@ Returns the sum of all metrics reported for `{key}` over the past hour
 
 ## Running
 
-1. `npm install -g pnpm`
+1. `npm install`
 
-2. `pnpm install`
-
-3. `pnpm start`
+2. `npm start`
 
 ### Configuration
 
@@ -36,11 +34,11 @@ server:
 
 ## Testing
 
-1. `pnpm test`
+1. `npm test`
 
 ## Building
 
-1. `pnpm run build`
+1. `npm run build`
 
 ## How It Works
 
