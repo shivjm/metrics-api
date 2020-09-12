@@ -52,6 +52,8 @@ installation:
    λ curl -i -X POST -H "Content-Type: application/json" -d "{ \"value\": 4 }" localhost:3000/metric/foo
    HTTP/1.1 200 OK
    X-Powered-By: Express
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 2
    ETag: W/"a-bAsFyilMr4Ra1hIU5PyoyFRunpI"
    Date: Sat, 12 Sep 2020 19:05:04 GMT
    Connection: keep-alive
@@ -61,13 +63,13 @@ installation:
    λ curl -i localhost:3000/metric/foo/sum
    HTTP/1.1 200 OK
    X-Powered-By: Express
-   Content-Type: text/html; charset=utf-8
-   Content-Length: 1
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 11
    ETag: W/"1-G2RTiSRzpGfQc3LUXrBavCAxZHo"
    Date: Sat, 12 Sep 2020 19:07:53 GMT
    Connection: keep-alive
    
-   4
+   {"value":4}
    ```
 
 ## Testing

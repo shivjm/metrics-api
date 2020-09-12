@@ -44,7 +44,10 @@ export function create(
       return;
     }
 
-    res.status(200).send(value.toString(10));
+    res
+      .header("Content-Type", "application/json")
+      .status(200)
+      .send(JSON.stringify({ value }));
   });
 
   return app;

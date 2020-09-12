@@ -34,18 +34,18 @@ describe("Server", () => {
       assert.equal(response2.status, 200);
       assert.deepEqual(response2.body, {});
 
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "5",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 5 },
         "metrics must be saved"
       );
 
       time = 61; // the age is now exactly the maximum
       pruneCallback();
 
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "5",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 5 },
         "metrics at the maximum age must not be erased"
       );
 
@@ -53,36 +53,36 @@ describe("Server", () => {
 
       // no change in the time, so no metrics should be pruned
       pruneCallback();
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "77",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 77 },
         "metrics at the maximum age must not be erased (no change in time)"
       );
 
       time = 62;
       // now the first metric should be pruned
       pruneCallback();
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "72",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 72 },
         "outdated metrics must be pruned"
       );
 
       time = 122;
       // now the second metric is older than the maximum, but there is no call
       // to `pruneCallback`, so it shouldn't be deleted yet
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "72",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 72 },
         "outdated metrics must not be pruned without an explicit call to `prune`"
       );
       pruneCallback();
 
       // *now* it should have been deleted
 
-      assert.equal(
-        (await agent.get("/metric/foo/sum")).text,
-        "0",
+      assert.deepEqual(
+        (await agent.get("/metric/foo/sum")).body,
+        { value: 0 },
         "metrics older than the maximum age must be erased (second round)"
       );
     } finally {
