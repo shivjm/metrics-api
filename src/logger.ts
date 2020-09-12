@@ -43,8 +43,8 @@ export class Logger {
 function discard(_message: string, _context: Context) {}
 
 function handler(label: string, loggerContext: Context): LoggerHandler {
-  return (message: string, userContext: Context) => {
-    const context: Context = {
+  return (message: string, userContext: Context = {}) => {
+    const context = {
       timestamp: getSystemTimeInSeconds(),
       message,
       level: label,
