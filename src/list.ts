@@ -16,6 +16,8 @@ export interface IMetricNode {
   next?: IMetricNode;
 }
 
+// Adds `node` to the end of `list` by mutating `list` in place. Follows any
+// links in `node`.
 export function append(list: IList, node: IMetricNode) {
   if (list.head === undefined) {
     list.head = node;
@@ -35,12 +37,14 @@ export function append(list: IList, node: IMetricNode) {
   list.tail = tail;
 }
 
-export function dropWhile(
+// Deletes contiguous nodes satisfying `filter` from the beginning of `list` by
+// mutating it in place.
+export function deleteWhile(
   list: IList,
   filter: (node: IMetricNode) => boolean
-): IList {
+) {
   if (list.head === undefined) {
-    return list;
+    return;
   }
 
   let current = list.head;
@@ -54,5 +58,5 @@ export function dropWhile(
     current = next;
   }
 
-  return { head: current, tail: list.tail };
+  list.head = current;
 }

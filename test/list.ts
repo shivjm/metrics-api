@@ -1,7 +1,7 @@
 import "mocha";
 import { assert } from "chai";
 
-import { append, dropWhile, IList, IMetricNode } from "../src/list";
+import { append, deleteWhile, IList, IMetricNode } from "../src/list";
 
 describe("A linked list", () => {
   it("can be created", () => {
@@ -54,9 +54,7 @@ describe("A linked list", () => {
 
     const list2: IList = { ...list1 };
 
-    assert.deepEqual(
-      dropWhile(list2, ({ timestamp }) => timestamp < 5),
-      { head: { ...node2 }, tail: node4 }
-    );
+    deleteWhile(list2, ({ timestamp }) => timestamp < 5);
+    assert.deepEqual(list2, { head: { ...node2 }, tail: node4 });
   });
 });
