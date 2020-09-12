@@ -31,7 +31,7 @@ export function create(
 
     metrics.record(metric, req.body.value);
 
-    res.sendStatus(204);
+    res.status(200).send("{}");
   });
 
   app.get("/metric/:metric/sum", (req, res) => {

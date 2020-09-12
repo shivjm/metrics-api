@@ -22,15 +22,17 @@ describe("Server", () => {
     const agent = chai.request(app).keepOpen();
 
     try {
-      const response = await agent.get("/metric/foo/sum");
+      const response1 = await agent.get("/metric/foo/sum");
       assert.equal(
-        response.status,
+        response1.status,
         400,
         "fetching an unknown metric must return a 400 Bad Request"
       );
       pruneCallback();
 
-      await agent.post("/metric/foo").send({ value: 5 });
+      const response2 = await agent.post("/metric/foo").send({ value: 5 });
+      assert.equal(response2.status, 200);
+      assert.deepEqual(response2.body, {});
 
       assert.equal(
         (await agent.get("/metric/foo/sum")).text,
