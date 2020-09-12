@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "es2019"
+    ],
+    "target": "es2018",
+    "strict": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
