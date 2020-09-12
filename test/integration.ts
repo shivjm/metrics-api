@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 
 const { assert } = chai;
 
-import { create } from "../src/index";
+import { create } from "../src/server";
 
 describe("Server", () => {
   const app = create();
