@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
+    "build": "tsc -p tsconfig.production.json --outDir dist",
+    "check": "tsc -p tsconfig.json --noEmit",
     "start": "node -r ts-node/register src/run.ts",
     "test": "mocha -r ts-node/register test/**/*.ts"
   },
