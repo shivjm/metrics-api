@@ -37,7 +37,7 @@ const app = create(
   (prune) =>
     (intervalId = setInterval(() => {
       const deleted = prune();
-      logger.info("Pruned expired entries", { deleted });
+      logger.trace("Pruned expired entries", { deleted });
     }, parseInt(METRICS_APP_PRUNE_INTERVAL_SECONDS, 10) * 1000))
 );
 const server = app.listen(METRICS_APP_PORT);
