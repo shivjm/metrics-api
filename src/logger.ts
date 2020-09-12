@@ -55,3 +55,20 @@ function handler(label: string, loggerContext: Context): LoggerHandler {
     stdout.write(JSON.stringify(context) + "\n");
   };
 }
+
+export function parseLevel(level: String): Level {
+  switch (level.trim().toUpperCase()) {
+    case "ERROR":
+      return Level.ERROR;
+    case "WARN":
+      return Level.WARN;
+    case "INFO":
+      return Level.INFO;
+    case "DEBUG":
+      return Level.DEBUG;
+    case "TRACE":
+      return Level.TRACE;
+  }
+
+  throw new Error(`${level} is not a valid log level`);
+}
