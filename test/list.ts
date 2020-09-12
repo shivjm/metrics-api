@@ -1,43 +1,25 @@
 import "mocha";
 import { assert } from "chai";
 
-import { append, deleteWhile, IList, IMetricNode, reduce } from "../src/list";
+import { append, IMetricNode, reduce, skipWhile } from "../src/list";
 
 describe("A linked list", () => {
-  it("can be created", () => {
-    const _list: IList = {};
-
-    const tail = { value: 1, timestamp: 5 };
-    const _list2: IList = {
-      head: { value: 2, timestamp: 3, next: tail },
-      tail,
-    };
-  });
-
   it("can have items appended to it", () => {
-    const list: IList = {};
+    const node1: IMetricNode = { value: 5, timestamp: 0 };
 
-    const node1 = { value: 5, timestamp: 0 };
-    append(list, { ...node1 });
-
-    assert.deepEqual(list.head, node1);
-    assert.deepEqual(list.tail, node1);
-
-    const node2 = { value: 20, timestamp: 800 };
-    append(list, { ...node2 });
-    assert.deepEqual(list.head, { ...node1, next: node2 });
-    assert.deepEqual(list.tail, node2);
+    const node2: IMetricNode = { value: 20, timestamp: 800 };
+    append(node1, { ...node2 });
+    assert.deepEqual(node1, { ...node1, next: node2 });
 
     const node3: IMetricNode = { value: 0, timestamp: 801 };
     const node4 = { value: 15, timestamp: 802 };
     node3.next = node4;
-    append(list, { ...node3 });
+    append(node1, { ...node3 });
 
-    assert.deepEqual(list.head, {
+    assert.deepEqual(node1, {
       ...node1,
       next: { ...node2, next: { ...node3 } },
     });
-    assert.deepEqual(list.tail, node4);
   });
 
   it("can drop filtered items", () => {
@@ -50,15 +32,15 @@ describe("A linked list", () => {
     node2.next = node3;
     node3.next = node4;
 
-    const list1: IList = { head: node1, tail: node4 };
+    assert.deepEqual(
+      skipWhile(node1, ({ timestamp }) => timestamp < 5),
+      node2
+    );
 
-    const list2: IList = { ...list1 };
-
-    deleteWhile(list2, ({ timestamp }) => timestamp < 5);
-    assert.deepEqual(list2, { head: { ...node2 }, tail: node4 });
-
-    deleteWhile(list2, () => true);
-    assert.deepEqual(list2, {});
+    assert.deepEqual(
+      skipWhile(node1, () => true),
+      undefined
+    );
   });
 
   it("can be traversed", () => {
@@ -71,10 +53,8 @@ describe("A linked list", () => {
     node2.next = node3;
     node3.next = node4;
 
-    const list1: IList = { head: node1, tail: node4 };
-
     assert.equal(
-      reduce(list1, (acc, curr) => acc + curr, 0),
+      reduce(node1, (acc, curr) => acc + curr, 0),
       960
     );
   });

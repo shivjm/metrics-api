@@ -1,7 +1,7 @@
-import { append, deleteWhile, IList, reduce } from "./list";
+import { append, skipWhile, IMetricNode, reduce } from "./list";
 
 export class Metrics {
-  private readonly store: Map<string, IList> = new Map();
+  private readonly store: Map<string, IMetricNode | undefined> = new Map();
 
   constructor(
     public readonly maxAgeInSeconds: number,
@@ -15,38 +15,50 @@ export class Metrics {
 
     let deleted = 0;
 
-    for (const list of this.store.values()) {
-      const { head } = list;
-
-      if (head === undefined) {
+    for (const [key, node] of this.store.entries()) {
+      if (node === undefined) {
         continue;
       }
 
-      const before = reduce(list, (acc, _curr) => acc + 1, 0);
-      deleteWhile(list, (node) => now - node.timestamp > this.maxAgeInSeconds);
-      const after = reduce(list, (acc, _curr) => acc + 1, 0);
+      const initialCount = reduce(node, (acc, _curr) => acc + 1, 0);
+      const newHeadNode = skipWhile(
+        node,
+        (node) => now - node.timestamp > this.maxAgeInSeconds
+      );
+      this.store.set(key, newHeadNode);
+      const newCount =
+        newHeadNode === undefined
+          ? 0
+          : reduce(newHeadNode, (acc, _curr) => acc + 1, 0);
 
-      deleted += before - after;
+      deleted += initialCount - newCount;
     }
 
     return deleted;
   }
 
   record(key: string, value: number) {
-    if (!this.store.has(key)) {
-      this.store.set(key, {});
-    }
+    const node = { value, timestamp: this.getCurrentTime() };
 
-    append(this.store.get(key)!, { value, timestamp: this.getCurrentTime() });
+    const existing = this.store.get(key);
+    if (existing === undefined) {
+      this.store.set(key, node);
+    } else {
+      append(existing, node);
+    }
   }
 
   sum(key: string): number | undefined {
-    const list = this.store.get(key);
-
-    if (list === undefined) {
+    if (!this.store.has(key)) {
       return undefined;
     }
 
-    return reduce(list, (acc, curr) => acc + curr, 0);
+    const node = this.store.get(key);
+
+    if (node === undefined) {
+      return 0;
+    }
+
+    return reduce(node, (acc, curr) => acc + curr, 0);
   }
 }

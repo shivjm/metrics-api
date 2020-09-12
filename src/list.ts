@@ -1,10 +1,5 @@
 // A simplistic variation on a linked list. Does not handle the same node being
 // part of multiple lists.
-export interface IList {
-  head?: IMetricNode;
-  tail?: IMetricNode;
-}
-
 export interface IMetricNode {
   // The value stored at this node.
   readonly value: number;
@@ -16,61 +11,47 @@ export interface IMetricNode {
   next?: IMetricNode;
 }
 
-// Adds `node` to the end of `list` by mutating `list` in place. Follows any
-// links in `node`.
-export function append(list: IList, node: IMetricNode) {
-  if (list.head === undefined) {
-    list.head = node;
+// Adds `node` to the end of the linked list represented by `start` (mutating).
+export function append(start: IMetricNode, node: IMetricNode) {
+  let current = start;
+
+  while (current.next !== undefined) {
+    current = current.next;
   }
 
-  if (list.tail !== undefined) {
-    const existing = list.tail;
-    existing.next = node;
-  }
-
-  let tail = node;
-
-  while (tail.next !== undefined) {
-    tail = tail.next;
-  }
-
-  list.tail = tail;
+  current.next = node;
 }
 
-// Deletes contiguous nodes satisfying `filter` from the beginning of `list` by
-// mutating it in place.
-export function deleteWhile(
-  list: IList,
+// Returns the sublist represented by the first node in the linked list
+// represented by `start` for which `filter` returns a falsy value (not
+// mutating, but returns the node from the list itself, not a copy).
+export function skipWhile(
+  start: IMetricNode,
   filter: (node: IMetricNode) => boolean
-) {
-  if (list.head === undefined) {
-    return;
-  }
-
-  let current = list.head;
+): IMetricNode | undefined {
+  let current = start;
 
   while (filter(current)) {
     const { next } = current;
     if (next === undefined) {
-      delete list.head;
-      delete list.tail;
       return;
     }
 
     current = next;
   }
 
-  list.head = current;
+  return current;
 }
 
+// Returns the result of applying `reducer` to every node in the linked list
+// represented by `start`. `initialValue` is the value to pass for `acc` in the
+// first iteration.
 export function reduce<T>(
-  list: IList,
+  start: IMetricNode,
   reducer: (acc: T, curr: number) => T,
   initialValue: T
 ): T {
-  const { head } = list;
-
-  let current = head;
+  let current: IMetricNode | undefined = start;
   let acc = initialValue;
 
   while (current !== undefined) {
