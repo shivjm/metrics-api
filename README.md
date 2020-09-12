@@ -36,7 +36,7 @@ Metrics are stored using a variation on a linked list which tracks the
 values and the times at which they were sent. The server maintains a
 `Map` from metric names to these lists. Thanks to the use of the
 [Performance measurement API](https://nodejs.org/api/perf_hooks.html),
-the server has a monotonically increasing clock[1] and new values are
+the server has a monotonically increasing time source[^1] and new values are
 appended to the list; therefore, the list is guaranteed to be sorted
 from oldest to newest, and discarding old data involves traversing it
 until we reach the first entry with a timestamp newer than our
@@ -44,6 +44,10 @@ threshold, which we then use as the new head of the list. This process
 is carried out either periodically or on every `sum` request,
 depending on the server’s configuration.
 
-[1] The absolute values are irrelevant since we only care about the
+Instead of directly calling `performance.now()` or `new Date()`, the
+`Metrics` class and functions that create it require the time source
+to be passed in explicitly. This makes it trivial to test time-based
+behaviour by simulating the passage of as much time as is required.
+
+[^1] The absolute values are irrelevant since we only care about the
 difference between any two timestamps.
-<
