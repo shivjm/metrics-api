@@ -28,14 +28,25 @@ logger.info("Starting...", {
   logLevel: logLevel,
 });
 
+let intervalId: NodeJS.Timeout;
+
 const app = create(
   logger,
   parseInt(METRICS_APP_MAX_AGE_SECONDS, 10),
   getMonotonicTimeInSeconds,
   (prune) =>
-    setInterval(() => {
+    (intervalId = setInterval(() => {
       const deleted = prune();
       logger.info("Pruned expired entries", { deleted });
-    }, parseInt(METRICS_APP_PRUNE_INTERVAL_SECONDS, 10) * 1000)
+    }, parseInt(METRICS_APP_PRUNE_INTERVAL_SECONDS, 10) * 1000))
 );
-app.listen(METRICS_APP_PORT);
+const server = app.listen(METRICS_APP_PORT);
+process.on("SIGINT", () => {
+  clearInterval(intervalId);
+  server.close((err) => {
+    if (err) {
+      logger.error("Error shutting down server", { err });
+      process.exitCode = 1;
+    }
+  });
+});
