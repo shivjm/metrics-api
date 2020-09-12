@@ -56,7 +56,7 @@ installation:
    Date: Sat, 12 Sep 2020 19:05:04 GMT
    Connection: keep-alive
    
-   λ curl -i 192.168.99.136:3000/metric/foo/sum
+   λ curl -i localhost:3000/metric/foo/sum
    HTTP/1.1 200 OK
    X-Powered-By: Express
    Content-Type: text/html; charset=utf-8
