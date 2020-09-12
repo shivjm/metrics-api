@@ -99,8 +99,7 @@ the list is guaranteed to be sorted from oldest to newest, and
 discarding old data involves traversing it until we reach the first
 entry with a timestamp newer than our threshold, which we then use as
 the new head of the list. This process is carried out either
-periodically or on every `sum` request, depending on the server’s
-configuration.
+periodically, with the interval being configurable.
 
 Instead of directly calling `performance.now()` or `new Date()`, the
 `Metrics` class and functions that create it require the time source
@@ -110,7 +109,7 @@ behaviour.
 ## Performance Notes
 
 To minimize overhead, the nodes in the linked lists are represented as
-bare objects conforming to interfaces (thanks to TypeScript), eliding
+plain objects conforming to interfaces (thanks to TypeScript), eliding
 the need to run constructors or follow prototypes.
 
 The downside of using a linked list is the need to traverse the entire
