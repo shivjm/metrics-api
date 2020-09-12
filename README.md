@@ -61,5 +61,21 @@ Instead of directly calling `performance.now()` or `new Date()`, the
 to be passed in explicitly. This makes it trivial to test time-based
 behaviour.
 
+## Performance Notes
+
+To minimize overhead, the nodes in the linked lists are represented as
+bare objects conforming to interfaces (thanks to TypeScript), eliding
+the need to run constructors or follow prototypes.
+
+The downside of using a linked list is the need to traverse the entire
+list to enumerate its entries, but since counting the metrics and
+similar operations are not required in this case, there is no need to
+enumerate those entries. The pruning function exploits the sorted
+nature of the list to stop as soon as it encounters an entry that
+should not be deleted. (Previous versions included an `IList`
+interface which tracked the head node and tail node of the list
+simultaneously, but as direct access to the tail was not required by
+any operations, this extra structure could be removed.)
+
 [^1] The absolute values are irrelevant since we only care about the
 difference between any two timestamps.
