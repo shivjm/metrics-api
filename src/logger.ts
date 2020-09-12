@@ -27,7 +27,7 @@ export class Logger {
     public readonly level: Level,
     public readonly context: Context = {}
   ) {
-    this.error = level >= Level.TRACE ? handler("error", context) : discard;
+    this.error = level >= Level.ERROR ? handler("error", context) : discard;
     this.warn = level >= Level.WARN ? handler("warn", context) : discard;
     this.info = level >= Level.INFO ? handler("info", context) : discard;
     this.debug = level >= Level.DEBUG ? handler("debug", context) : discard;
