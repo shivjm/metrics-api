@@ -50,11 +50,13 @@ installation:
 
    ```text
    λ curl -i -X POST -H "Content-Type: application/json" -d "{ \"value\": 4 }" localhost:3000/metric/foo
-   HTTP/1.1 204 No Content
+   HTTP/1.1 200 OK
    X-Powered-By: Express
    ETag: W/"a-bAsFyilMr4Ra1hIU5PyoyFRunpI"
    Date: Sat, 12 Sep 2020 19:05:04 GMT
    Connection: keep-alive
+   
+   {}
    
    λ curl -i localhost:3000/metric/foo/sum
    HTTP/1.1 200 OK
