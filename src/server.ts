@@ -29,7 +29,7 @@ export function create(
       return;
     }
 
-    metrics.record(metric, req.body.value);
+    metrics.record(metric, value);
 
     res.header("Content-Type", "application/json").status(200).send("{}");
   });
