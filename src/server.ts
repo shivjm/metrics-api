@@ -18,7 +18,7 @@ export function create(
   app.post("/metric/:metric", (req, res) => {
     const metric = req.params.metric;
     const raw = req.body.value;
-    const value = parseInt(raw, 10);
+    const value = parseFloat(raw);
     logger.info("Request received: record", {
       metric,
       value,
@@ -29,7 +29,7 @@ export function create(
       return;
     }
 
-    metrics.record(metric, value);
+    metrics.record(metric, Math.round(value));
 
     res.header("Content-Type", "application/json").status(200).send("{}");
   });

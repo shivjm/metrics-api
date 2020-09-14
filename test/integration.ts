@@ -30,7 +30,7 @@ describe("Server", () => {
       );
       pruneCallback();
 
-      const response2 = await agent.post("/metric/foo").send({ value: 5 });
+      const response2 = await agent.post("/metric/foo").send({ value: 5.1 });
       assert.equal(response2.status, 200);
       assert.deepEqual(response2.body, {});
 
@@ -49,7 +49,7 @@ describe("Server", () => {
         "metrics at the maximum age must not be erased"
       );
 
-      await agent.post("/metric/foo").send({ value: 72 });
+      await agent.post("/metric/foo").send({ value: "71.9" });
 
       // no change in the time, so no metrics should be pruned
       pruneCallback();
