@@ -17,15 +17,14 @@ export function create(
 
   app.post("/metric/:metric", (req, res) => {
     const metric = req.params.metric;
-    const raw = req.body.value;
-    const value = parseFloat(raw);
+    const { value } = req.body;
     logger.info("Request received: record", {
       metric,
       value,
     });
 
-    if (isNaN(value) || value === NaN) {
-      res.status(400).send("`value` must be a number");
+    if (typeof value !== "number" || isNaN(value) || !isFinite(value)) {
+      res.status(400).send("`value` must be a finite number");
       return;
     }
 
