@@ -30,6 +30,20 @@ describe("Server", () => {
       );
       pruneCallback();
 
+      for (const value of ["5.1", Infinity, NaN]) {
+        const response = await agent.post("/metric/foo").send({ value });
+        assert.equal(
+          response.status,
+          400,
+          `trying to record a value of ${JSON.stringify(value)} must fail`
+        );
+        assert.deepEqual(
+          response.body,
+          {},
+          "the error response must return an empty body"
+        );
+      }
+
       const response2 = await agent.post("/metric/foo").send({ value: 5.1 });
       assert.equal(response2.status, 200);
       assert.deepEqual(response2.body, {});
@@ -49,7 +63,7 @@ describe("Server", () => {
         "metrics at the maximum age must not be erased"
       );
 
-      await agent.post("/metric/foo").send({ value: "71.9" });
+      await agent.post("/metric/foo").send({ value: 71.9 });
 
       // no change in the time, so no metrics should be pruned
       pruneCallback();

@@ -10,6 +10,8 @@ paths:
       summary: "Records a metric"
       description: "Automatically adds current timestamp."
       operationId: "recordMetric"
+      consumes:
+        - "application/json"
       produces:
         - "application/json"
       parameters:
@@ -18,9 +20,25 @@ paths:
           description: "Name of metric to record"
           required: true
           type: "string"
+        - name: "value"
+          in: "body"
+          description: "Value of metric to record"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "number"
+            required:
+              - "value"
       responses:
         200:
           description: "metric successfully recorded"
+          schema:
+            type: "object"
+            properties: {}
+        400:
+          description: "invalid value for metric"
           schema:
             type: "object"
             properties: {}
