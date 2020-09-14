@@ -37,6 +37,11 @@ describe("Server", () => {
           400,
           `trying to record a value of ${JSON.stringify(value)} must fail`
         );
+        assert.deepEqual(
+          response.body,
+          {},
+          "the error response must return an empty body"
+        );
       }
 
       const response2 = await agent.post("/metric/foo").send({ value: 5.1 });

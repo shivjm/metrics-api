@@ -24,13 +24,13 @@ export function create(
     });
 
     if (typeof value !== "number" || isNaN(value) || !isFinite(value)) {
-      res.status(400).send("`value` must be a finite number");
+      res.status(400).send({});
       return;
     }
 
     metrics.record(metric, Math.round(value));
 
-    res.header("Content-Type", "application/json").status(200).send("{}");
+    res.header("Content-Type", "application/json").status(200).send({});
   });
 
   app.get("/metric/:metric/sum", (req, res) => {
